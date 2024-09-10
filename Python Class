@@ -1,0 +1,57 @@
+Write a Python function that counts the frequency of each word in a given paragraph. The function should return the result as a dictionary. Additionally, provide a way to retrieve the most frequently occurring word(s) from this dictionary
+input_paragraph = "Hello world Hello world ... by Zayn Hussain
+Zayn Hussain
+9:34 PM
+input_paragraph = "Hello world Hello world This world is full of surprises Surprises are everywhere; surprises are fun"
+
+{     'hello': 2,     'world': 3,    ... by Zayn Hussain
+Zayn Hussain
+9:34 PM
+{
+    'hello': 2,
+    'world': 3,
+    'this': 1,
+    'is': 1,
+    'full': 1,
+    'of': 1,
+    'surprises': 3,
+    'are': 3,
+    'everywhere': 1,
+    'fun': 1
+}
+Most frequent word(s): ['world', 'surprises']
+
+Solution:
+
+import re
+from collections import Counter
+
+def count_word_frequency(paragraph):
+    # Convert to lowercase and remove punctuation using regex
+    cleaned_paragraph = re.sub(r'[^\w\s]', '', paragraph.lower())
+    
+    # Split paragraph into words
+    words = cleaned_paragraph.split()
+    
+    # Count word frequencies
+    word_count = Counter(words)
+    
+    return word_count
+
+def most_frequent_words(word_count):
+    # Find the maximum frequency
+    max_freq = max(word_count.values())
+    
+    # Find all words with the maximum frequency
+    most_frequent = [word for word, freq in word_count.items() if freq == max_freq]
+    
+    return most_frequent
+
+# Test with the provided input
+input_paragraph = "Hello world Hello world This world is full of surprises Surprises are everywhere; surprises are fun"
+word_count = count_word_frequency(input_paragraph)
+most_frequent = most_frequent_words(word_count)
+
+# Print results
+print("Word Count:", dict(word_count))
+print("Most Frequent Word(s):", most_frequent)
