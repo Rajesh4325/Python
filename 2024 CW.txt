@@ -1,0 +1,183 @@
+
+docker exec -it takeo-de-env /bin/bash
+Table: Employee +--------------+---------+... by Zayn Hussain
+Zayn Hussain
+9:41 PM
+Table: Employee
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| id           | int     |
+| name         | varchar |
+| salary       | int     |
+| departmentId | int     |
++--------------+---------+
+In SQL, id is the primary key column for this table.
+departmentId is a foreign key (join key in Pandas) of the ID from the Department table.
+Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
+ 
+ 
+Table: Department
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+In SQL, id is the primary key column for this table. It is guaranteed that the department name is not NULL.
+Each row of this table indicates the ID of a department and its name.
+ 
+ 
+Find employees who have the highest salary in each of the departments.
+Return the result table in any order.
+The result format is in the following example.
+ 
+Example 1:
+Input: 
+Employee table:
++----+-------+--------+--------------+
+| id | name  | salary | departmentId |
++----+-------+--------+--------------+
+| 1  | Joe   | 70000  | 1            |
+| 2  | Jim   | 90000  | 1            |
+| 3  | Henry | 80000  | 2            |
+| 4  | Sam   | 60000  | 2            |
+| 5  | Max   | 90000  | 1            |
++----+-------+--------+--------------+
+Department table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | IT    |
+| 2  | Sales |
++----+-------+
+Output: 
++------------+----------+--------+
+| Department | Employee | Salary |
++------------+----------+--------+
+| IT         | Jim      | 90000  |
+| Sales      | Henry    | 80000  |
+| IT         | Max      | 90000  |
++------------+----------+--------+
+Explanation: Max and Jim both have the highest salary in the IT department and Henry has the highest salary in the Sales department.
+****** by Zayn Hussain
+Zayn Hussain
+9:43 PM
+******
+Table: Employee +-------------+---------+ ... by Zayn Hussain
+Zayn Hussain
+9:43 PM
+Table: Employee
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| department  | varchar |
+| managerId   | int     |
++-------------+---------+
+In SQL, id is the primary key column for this table.
+Each row of this table indicates the name of an employee, their department, and the id of their manager.
+If managerId is null, then the employee does not have a manager.
+No employee will be the manager of themself.
+ 
+ 
+Find the managers with at least five direct reports.
+Return the result table in any order.
+The result format is in the following example.
+
+Ans: 
+SELECT d.name AS Department, e.name AS Employee, e.salary AS Salary
+FROM Employee e
+JOIN Department d ON e.departmentId = d.id
+WHERE (e.departmentId, e.salary) IN (
+    -- Subquery to find the highest salary per department
+    SELECT departmentId, MAX(salary)
+    FROM Employee
+    GROUP BY departmentId
+);
+
+SELECT m.name AS Manager
+FROM Employee e
+JOIN Employee m ON e.managerId = m.id
+GROUP BY m.id, m.name
+HAVING COUNT(e.id) >= 5;
+
+2. Find All Pairs in a List that Sum to a Specific Value
+Write a Python function to find all pairs in a list that sum to a specific value.
+Input: [1, 2, 3, 4, 5], Sum=6
+Output: [(1, 5), (2, 4)]
+
+Table: Insurance
++-------------+-------+
+| Column Name | Type  |
++-------------+-------+
+| pid         | int   |
+| tiv_2015    | float |
+| tiv_2016    | float |
+| lat         | float |
+| lon         | float |
++-------------+-------+
+pid is the primary key column for this table.
+Each row of this table contains information about one policy where:
+pid is the policyholder's policy ID.
+tiv_2015 is the total investment value in 2015 and tiv_2016 is the total investment value in 2016.
+lat is the latitude of the policy holder's city. It's guaranteed that lat is not NULL.
+lon is the longitude of the policy holder's city. It's guaranteed that lon is not NULL.
+
+Ans: 
+def find_pairs(nums, target_sum):
+    pairs = []
+    seen = set()
+
+    for num in nums:
+        complement = target_sum - num
+        if complement in seen:
+            pairs.append((complement, num))
+        seen.add(num)
+
+    return pairs
+
+# Example usage
+nums = [1, 2, 3, 4, 5]
+target_sum = 6
+result = find_pairs(nums, target_sum)
+print(result)  # Output: [(1, 5), (2, 4)]
+
+
+SELECT *
+FROM Insurance
+WHERE tiv_2015 > 10000
+AND tiv_2016 > tiv_2015
+AND (lat, lon) IN (
+    SELECT lat, lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+);
+
+
+
+3. Write an SQL query to report the sum of all total investment values in 2016 tiv_2016, for all policyholders who:
+have the same tiv_2015 value as one or more other policyholders, and
+are not located in the same city like any other policyholder (i.e., the (lat, lon) attribute pairs must be unique).
+Round tiv_2016 to two decimal places.
+The query result format is in the following example.
+
+
+SELECT ROUND(SUM(tiv_2016), 2) AS total_investment
+FROM insurance
+WHERE tiv_2015 IN (
+    -- Find tiv_2015 values that are shared by more than one policyholder
+    SELECT tiv_2015
+    FROM insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(*) > 1
+)
+AND (lat, lon) IN (
+    -- Find unique (lat, lon) pairs to ensure policyholders are in unique locations
+    SELECT lat, lon
+    FROM insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+);
