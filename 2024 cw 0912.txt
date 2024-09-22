@@ -1,0 +1,436 @@
+1. docker run --name takeo-de-env -it  -d zaynh/takeo-de-m1-m2 bash
+   docker run --name 
+
+2. Docker composer Command
+	services:
+    pgdatabase:
+        image: postgres:13
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=root
+            - POSTGRES_DB=ny_taxi
+        volumes:
+            - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+        ports:
+            - "5432:5432"
+    pgadmin:
+        image: dpage/pgadmin4
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+            - PGADMIN_DEFAULT_PASSWORD=root
+        ports:
+            - "8181:80"
+			
+			****----*****
+			
+			
+		*********08/29/2024******************
+		Table: Employee
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| empId       | int     |
+| name        | varchar |
+| supervisor  | int     |
+| salary      | int     |
++-------------+---------+
+empId is the primary key column for this table.
+Each row of this table indicates the name and the ID of an employee in addition to their salary and the id of their manager.
+ 
+ 
+Table: Bonus
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| empId       | int  |
+| bonus       | int  |
++-------------+------+
+empId is the primary key column for this table.
+empId is a foreign key to empId from the Employee table.
+Each row of this table contains the id of an employee and their respective bonus.
+ 
+ 
+Write an SQL query to report the name and bonus amount of each employee with a bonus less than 1000.
+Return the result table in any order.
+The query result format is in the following example.
+empId       | int     |
+| name        | varchar |
+| supervisor  | int     |
+| salary      | int  
+
+empId       | int  |
+| bonus       | int  
+select empid, name from employee inner join Bonous on employee.empid= Bonous.empid
+where Bonous.empid < 1000;
+
+
+
+
+Q2-  by Zayn Hussain
+Zayn Hussain
+8:44 PM
+Q2- 
+Table: Customer +-------------+---------+ ... by Zayn Hussain
+Zayn Hussain
+8:44 PM
+Table: Customer
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| referee_id  | int     |
++-------------+---------+
+id is the primary key column for this table.
+Each row of this table indicates the id of a customer, their name, and the id of the customer who referred them.
+ 
+Write an SQL query to report the names of the customer that are not referred by the customer with id = 2.
+Return the result table in any order.
+The query result format is in the following example.
+ 
+Example 1:
+Input: 
+Customer table:
++----+------+------------+
+| id | name | referee_id |
++----+------+------------+
+| 1  | Will | null       |
+| 2  | Jane | null       |
+| 3  | Alex | 2          |
+| 4  | Bill | null       |
+| 5  | Zack | 1          |
+| 6  | Mark | 2          |
++----+------+------------+
+Output: 
++------+
+| name |
++------+
+| Will |
+| Jane |
+| Bill |
+| Zack |
++------+
+
+
+Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| referee_id  | int
+
+1  | Will | null       |
+| 2  | Jane | null       |
+| 3  | Alex | 2          |
+| 4  | Bill | null       |
+| 5  | Zack | 1          |
+| 6  | Mark | 2
+
+SELECT name, referee_id from Customer
+WHERE (referee_id != 2);
+
+Q3 -  by Zayn Hussain
+Zayn Hussain
+8:46 PM
+Q3 - 
++-------------+---------+ | Column Name | T... by Zayn Hussain
+Zayn Hussain
+8:46 PM
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| student     | varchar |
+| class       | varchar |
++-------------+---------+
+(student, class) is the primary key column for this table.
+Each row of this table indicates the name of a student and the class in which they are enrolled.
+ 
+ 
+Write an SQL query to report all the classes that have at least five students.
+Return the result table in any order.
+The query result format is in the following example.
+ 
+Example 1:
+Input: 
+Courses table:
++---------+----------+
+| student | class    |
++---------+----------+
+| A       | Math     |
+| B       | English  |
+| C       | Math     |
+| D       | Biology  |
+| E       | Math     |
+| F       | Computer |
+| G       | Math     |
+| H       | Math     |
+
+| I       | Math     |
++---------+----------+
+Output: 
++---------+
+| class   |
++---------+
+| Math    |
++---------+
+Explanation: 
+- Math has 6 students, so we include it.
+- English has 1 student, so we do not include it.
+- Biology has 1 student, so we do not include it.
+- Computer has 1 student, so we do not include it.
+
+SELECT class, student from Courses (Group by class)
+HAVING COUNT(student) >= 5;
+
+Table: SalesPerson
++-----------------+---------+
+| Column Name     | Type    |
++-----------------+---------+
+| sales_id        | int     |
+| name            | varchar |
+| salary          | int     |
+| commission_rate | int     |
+| hire_date       | date    |
++-----------------+---------+
+sales_id is the primary key column for this table.
+Each row of this table indicates the name and the ID of a salesperson alongside their salary, commission rate, and hire date.
+ 
+ 
+Table: Company
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| com_id      | int     |
+| name        | varchar |
+| city        | varchar |
++-------------+---------+
+com_id is the primary key column for this table.
+Each row of this table indicates the name and the ID of a company and the city in which the company is located.
+ 
+ 
+Table: Orders
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| order_id    | int  |
+| order_date  | date |
+| com_id      | int  |
+| sales_id    | int  |
+| amount      | int  |
++-------------+------+
+order_id is the primary key column for this table.
+com_id is a foreign key to com_id from the Company table.
+sales_id is a foreign key to sales_id from the SalesPerson table.
+Each row of this table contains information about one order. This includes the ID of the company, the ID of the salesperson, the date of the order, and the amount paid.
+ 
+ 
+Write an SQL query to report the names of all the salespersons who did not have any orders related to the company with the name "RED".
+Return the result table in any order.
+The query result format is in the following example.
+ 
+Example 1:
+Input: 
+SalesPerson table:
++----------+------+--------+-----------------+------------+
+| sales_id | name | salary | commission_rate | hire_date  |
++----------+------+--------+-----------------+------------+
+| 1        | John | 100000 | 6               | 4/1/2006   |
+| 2        | Amy  | 12000  | 5               | 5/1/2010   |
+| 3        | Mark | 65000  | 12              | 12/25/2008 |
+| 4        | Pam  | 25000  | 25              | 1/1/2005   |
+| 5        | Alex | 5000   | 10              | 2/3/2007   |
++----------+------+--------+-----------------+------------+
+Company table:
++--------+--------+----------+
+| com_id | name   | city     |
++--------+--------+----------+
+| 1      | RED    | Boston   |
+| 2      | ORANGE | New York |
+| 3      | YELLOW | Boston   |
+| 4      | GREEN  | Austin   |
++--------+--------+----------+
+Orders table:
++----------+------------+--------+----------+--------+
+| order_id | order_date | com_id | sales_id | amount |
++----------+------------+--------+----------+--------+
+| 1        | 1/1/2014   | 3      | 4        | 10000  |
+| 2        | 2/1/2014   | 4      | 5        | 5000   |
+| 3        | 3/1/2014   | 1      | 1        | 50000  |
+| 4        | 4/1/2014   | 1      | 4        | 25000  |
++----------+------------+--------+----------+--------+
+Output: 
+
+SELECT sales_id from SalesPerson join 
+WHERE s.sales_id NOT IN (
+    SELECT o.sales_id
+    FROM Orders o
+    JOIN Company c ON o.com_id = c.com_id
+    WHERE c.name = 'RED'
+);
+
+
+********09/09/2024****************
+
+Write a Python function that counts the frequency of each word in a given paragraph. The function should return the result as a dictionary. Additionally, provide a way to retrieve the most frequently occurring word(s) from this dictionary
+input_paragraph = "Hello world Hello world ... by Zayn Hussain
+Zayn Hussain
+9:34 PM
+input_paragraph = "Hello world Hello world This world is full of surprises Surprises are everywhere; surprises are fun"
+
+{     'hello': 2,     'world': 3,    ... by Zayn Hussain
+Zayn Hussain
+9:34 PM
+{
+    'hello': 2,
+    'world': 3,
+    'this': 1,
+    'is': 1,
+    'full': 1,
+    'of': 1,
+    'surprises': 3,
+    'are': 3,
+    'everywhere': 1,
+    'fun': 1
+}
+Most frequent word(s): ['world', 'surprises']
+
+has context menu		
+		
+		
+		
+Steps:
+Convert string to list
+list to dictionaryt
+*************09/10/2024***********
+Count Vowels in a String
+Question: Write a Python function to count the number of vowels (a, e, i, o, u) in a given string.
+Input: "Hello World"
+Output: 3
+Reverse a String Write a Python function to... by Zayn Hussain
+Zayn Hussain
+10:04 PM
+Reverse a String
+Write a Python function to reverse a given string.
+Input: "hello"
+Output: "olleh"
+Remove Duplicates from a List Write a Pytho... by Zayn Hussain
+Zayn Hussain
+10:12 PM
+Remove Duplicates from a List
+Write a Python function to remove duplicates from a list while preserving the order.
+Input: [1, 2, 2, 3, 4, 4, 5]
+Output: [1, 2, 3, 4, 5]
+has context menu
+
+
+**************09/12/2024**************
+Merge Two Dictionaries
+Write a Python function to merge two dictionaries.
+Input: {'a': 1, 'b': 2}, {'b': 3, 'c': 4}
+Output: {'a': 1, 'b': 3, 'c': 4}
+
+Ans: 
+def merge_dictionaries(dict1, dict2):
+    
+    merged_dict = {**dict1, **dict2}
+    return merged_dict
+
+
+dict1 = {'a': 1, 'b': 2}
+dict2 = {'b': 3, 'c': 4}
+result = merge_dictionaries(dict1, dict2)
+print(result)  # Output: {'a': 1, 'b': 3, 'c': 4}
+
+
+
+ Find Key with Maximum Value
+Write a Python function to find the key with the maximum value in a dictionary.
+Input: {'a': 10, 'b': 20, 'c': 5}
+Output: 'b'
+
+Ans: 
+def find_key_with_max_value(input_dict):
+  
+    max_key = max(input_dict, key=input_dict.get)
+    return max_key
+
+
+input_dict = {'a': 10, 'b': 20, 'c': 5}
+result = find_key_with_max_value(input_dict)
+print(result)  # Output: 'b'
+
+
+
+Invert a Dictionary
+Write a Python function to invert a dictionary (swap keys and values).
+Input: {'a': 1, 'b': 2, 'c': 3}
+Output: {1: 'a', 2: 'b', 3: 'c'}
+
+Ans: 
+def invert_dictionary(input_dict):
+  
+    inverted_dict = {value: key for key, value in input_dict.items()}
+    return inverted_dict
+
+input_dict = {'a': 1, 'b': 2, 'c': 3}
+result = invert_dictionary(input_dict)
+print(result)  # Output: {1: 'a', 2: 'b', 3: 'c'}
+
+
+
+
+Group Anagrams Using a Dictionary
+Write a Python function to group anagrams from a list of words using a dictionary.
+Input: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat']
+Output: [['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
+
+Ans: 
+from collections import defaultdict
+
+def group_anagrams(words):
+    
+    anagrams = defaultdict(list)
+    
+    for word in words:
+       
+        key = tuple(sorted(word))
+        anagrams[key].append(word)
+    
+   
+    return list(anagrams.values())
+
+
+words = ['eat', 'tea', 'tan', 'ate', 'nat', 'bat']
+result = group_an
+
+
+
+
+Compress a String Using the Counts of Repeated Characters 
+Write a Python function to perform basic string compression using the counts of repeated characters.
+Input: "aabcccccaaa"
+Output: "a2b1c5a3"
+
+Ans:
+def compress_string(s):
+   
+    compressed = []
+    count = 1
+
+    
+    for i in range(1, len(s)):
+        
+        if s[i] == s[i - 1]:
+            count += 1
+        else:
+            
+            compressed.append(s[i - 1] + str(count))
+            count = 1
+
+    compressed.append(s[-1] + str(count))
+
+    return ''.join(compressed)
+
+
+input_str = "aabcccccaaa"
+result = compress_string(input_str)
+print(result)  # Output: "a2b1c5a3"
